@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface Music : NSObject
+
+- (void) registerMediaPlayerNotifications;
+- (void)onTimer;
 
 @end

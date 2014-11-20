@@ -1,0 +1,22 @@
+PODS:
+  - Bolts (1.1.2)
+  - Facebook-iOS-SDK (3.17.0):
+    - Bolts
+  - FatSecretKit (0.0.2):
+    - SVHTTPRequest (~> 0.3)
+  - Parse (1.2.20):
+    - Facebook-iOS-SDK (~> 3.11)
+  - SVHTTPRequest (0.5)
+
+DEPENDENCIES:
+  - FatSecretKit
+  - Parse
+
+SPEC CHECKSUMS:
+  Bolts: 2635e8698a630774689441047f3465d78c48d485
+  Facebook-iOS-SDK: f20274d809f112ba540842e2b6cbe50128d51b7b
+  FatSecretKit: d45ee7899b737c04c536a85a827cde80b918d493
+  Parse: 28c0dc54f30201a369d29a2f76c09fa43b2add16
+  SVHTTPRequest: 4fdeb78b1900f0c58409bd4930d07d051fce0160
+
+COCOAPODS: 0.33.1

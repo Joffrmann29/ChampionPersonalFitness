@@ -7,7 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
 
-@interface FitnessMapViewController : UIViewController
+@interface FitnessMapViewController : UIViewController<MKMapViewDelegate,MKAnnotation,CLLocationManagerDelegate>
+
+@property (strong, nonatomic) IBOutlet MKMapView *mapView;
+@property (strong, nonatomic) NSString *destinationText;
+@property (strong, nonatomic) NSString *nameText;
+@property (strong, nonatomic) IBOutlet UINavigationBar *navBar;
+
+- (IBAction)back:(UIBarButtonItem *)sender;
+- (IBAction)Reroute:(UIBarButtonItem *)sender;
 
 @end

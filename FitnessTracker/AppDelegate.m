@@ -10,10 +10,33 @@
 
 @implementation AppDelegate
 
+-(BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    return YES;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [Parse setApplicationId:@"3h5pYNqnXVrJBrzraWWUHpG0uoVZ5cSAXKHY1txT"
+                  clientKey:@"7TynYd28vqRihHfLjooSqfYMa73pdOlS26OEENKZ"];
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    [PFFacebookUtils initializeFacebook];
+    [PFTwitterUtils initializeWithConsumerKey:@"36AkuAyofCTcn5wWyr7FupZfK" consumerSecret:@"svoIGtwG68TLwmXxibgRSqXWIA2vCndKrUbOMBMMNuLwvhm5wj"];
+    
+    // Set default ACLs
+    PFACL *defaultACL = [PFACL ACL];
+    [defaultACL setPublicReadAccess:YES];
+    [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
     // Override point for customization after application launch.
     return YES;
+}
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return [PFFacebookUtils handleOpenURL:url];
+    
+    [FSClient sharedClient].oauthConsumerKey = @"03e8582c377348a0938aa32ece40232c";
+    [FSClient sharedClient].oauthConsumerSecret = @"81d4704935734cec816e36c3883536bc";
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application

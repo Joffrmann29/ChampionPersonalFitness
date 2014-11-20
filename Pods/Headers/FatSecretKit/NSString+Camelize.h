@@ -1,0 +1,1 @@
+../../FatSecretKit/FatSecretKit/FatSecret/NSString+Camelize.h
