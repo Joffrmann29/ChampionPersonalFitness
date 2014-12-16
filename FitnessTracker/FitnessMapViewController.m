@@ -5,7 +5,7 @@
 //  Created by Administrator on 6/15/14.
 //  Copyright (c) 2014 Joffrey Mann. All rights reserved.
 //
-
+#define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 #import "FitnessMapViewController.h"
 #include <dispatch/dispatch.h>
 
@@ -31,7 +31,7 @@
 @property (nonatomic, strong) UIAlertView *alert;
 @property (nonatomic, strong) UIAlertView *invalidDestAlert;
 @property (nonatomic, strong) UIAlertView *calorieAlert;
-
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end
 
@@ -51,21 +51,29 @@ MKRoute *routeDetails;
 
 - (void)viewDidLoad
 {
-    self.mapView.mapType = MKMapTypeHybrid;
-    self.mapView.delegate = self;
-    self.mapView.mapType = MKMapTypeStandard;
-    self.mapView.showsUserLocation = YES;
-    [self zoomToCurrentLocation];
-    
-    [self showDestinationAlert];
-    [self.navBar setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-      [UIFont fontWithName:@"Zapfino" size:17],
-      NSFontAttributeName, nil]];
-    
-    [self.navBar setBackgroundImage:[UIImage imageNamed:@"ChampionNavBar.png"] forBarMetrics:UIBarMetricsDefault];
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+    
+        self.locationManager = [[CLLocationManager alloc]init];
+#ifdef __IPHONE_8_0
+        if(IS_OS_8_OR_LATER) {
+            [self.locationManager requestAlwaysAuthorization];
+        }
+#endif
+        [self.locationManager startUpdatingLocation];
+        // Do any additional setup after loading the view.
+        
+        self.mapView.delegate = self;
+        self.mapView.mapType = MKMapTypeStandard;
+        self.mapView.showsUserLocation = YES;
+        [self zoomToCurrentLocation];  // simulating a thread being tied up for 5 seconds
+        
+        
+        [self showDestinationAlert];
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -189,9 +197,6 @@ MKRoute *routeDetails;
         } else {
             routeDetails = response.routes.lastObject;
             [self.mapView addOverlay:routeDetails.polyline];
-//            NSString *destString = [placemark.addressDictionary objectForKey:@"Street"];
-//            NSString *distanceString = [NSString stringWithFormat:@"%0.1f Miles", routeDetails.distance/1609.344];
-//            NSString *transportText = [NSString stringWithFormat:@"%u" ,routeDetails.transportType];
             float distance = routeDetails.distance/1609.344;
             float distanceInSteps = distance * 5280;
             _projectedCalories = distanceInSteps * .0321;

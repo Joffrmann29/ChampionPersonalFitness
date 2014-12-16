@@ -12,7 +12,6 @@
 
 @protocol AddGoalViewControllerDelegate <NSObject>
 
--(void)didCancel;
 -(void)didAddGoal:(FitnessGoal *)goal;
 
 @end

@@ -19,6 +19,7 @@
 @property (strong, nonatomic) NSMutableArray *tracksList;
 @property (strong, nonatomic) MPMusicPlayerController *musicPlayer;
 @property (strong, nonatomic) NSTimer *currentTimer;
+@property (strong, nonatomic) IBOutlet UIView *navView;
 
 @end
 
@@ -32,7 +33,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
-    //Use an MPMusicPlayerController object, or music player, to play media items from the device iPod library. There are two types of music player:
     _musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
     
     // If the music player's playback state is that it's currently playing, set the play/pause button as selected to denote that it's currently playing.
@@ -63,14 +63,7 @@
     [btnLayer setCornerRadius:5.0f];
     [btnLayer setBorderWidth:1.0f];
     [btnLayer setBorderColor:[[UIColor whiteColor] CGColor]];
-    
-    // Programmatically changes the navigation bar's title text attributes like font name, size.
-    [self.navBar setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-      [UIFont fontWithName:@"Zapfino" size:17],
-      NSFontAttributeName, nil]];
-    
-    [self.navBar setBackgroundImage:[UIImage imageNamed:@"ChampionNavBar.png"] forBarMetrics:UIBarMetricsDefault];
+
     
     // Sets the slider's value according to the music player's current playback time
     _volumeChanger.value = self.musicPlayer.currentPlaybackTime;
@@ -86,10 +79,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MPMusicPlayerControllerPlaybackStateDidChangeNotification
                                                   object: _musicPlayer];
-    
-//    [[NSNotificationCenter defaultCenter] removeObserver: self
-//                                                    name: MPMusicPlayerControllerVolumeDidChangeNotification
-//                                                  object: _musicPlayer];
     
     [_musicPlayer endGeneratingPlaybackNotifications];
 }
@@ -241,7 +230,6 @@
     mediaPicker.delegate = self;
     mediaPicker.allowsPickingMultipleItems = YES;
     mediaPicker.prompt = @"Select songs to play";
-    
     [self presentViewController:mediaPicker animated:YES completion:nil];
 }
 

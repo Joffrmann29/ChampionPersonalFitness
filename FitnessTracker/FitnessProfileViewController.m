@@ -13,6 +13,7 @@
 @interface FitnessProfileViewController ()
 
 @property (strong, nonatomic) NSMutableData *imageData;
+@property (strong, nonatomic) IBOutlet UIView *navView;
 
 @end
 
@@ -100,13 +101,7 @@
     self.heightField.text = self.height;
     self.weightField.text = self.weight;
     
-    [self.navBar setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-      [UIFont fontWithName:@"Zapfino" size:17],
-      NSFontAttributeName, nil]];
-    
     self.view.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"Running.jpg"]];
-    [self.navBar setBackgroundImage:[UIImage imageNamed:@"ChampionNavBar.png"] forBarMetrics:UIBarMetricsDefault];
 }
 
 - (void)requestImage

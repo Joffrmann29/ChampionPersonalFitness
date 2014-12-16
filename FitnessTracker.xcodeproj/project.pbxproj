@@ -367,6 +367,7 @@
 			children = (
 				52FFB423194BC01C001A7A09 /* ViewController.h */,
 				52FFB424194BC01C001A7A09 /* ViewController.m */,
+				B4575EB21A253DE300800C97 /* New Group */,
 				B4E9CFF219B60B3E00445493 /* MenuViewController.h */,
 				B4E9CFF319B60B3E00445493 /* MenuViewController.m */,
 				52FFB446194BC469001A7A09 /* AddGoalViewController.h */,
@@ -377,6 +378,13 @@
 				52FFB44D194BC723001A7A09 /* EditGoalViewController.m */,
 			);
 			name = GoalControllers;
+			sourceTree = "<group>";
+		};
+		B4575EB21A253DE300800C97 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -429,7 +437,7 @@
 				ORGANIZATIONNAME = "Joffrey Mann";
 				TargetAttributes = {
 					52FFB40A194BC01B001A7A09 = {
-						DevelopmentTeam = K4XCB84M6V;
+						DevelopmentTeam = NCUCU8Q7HZ;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 1;
@@ -696,7 +704,7 @@
 				INFOPLIST_FILE = "FitnessTracker/FitnessTracker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = FitnessTracker;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "59c4ad7f-f0ad-4f8a-9ae1-75d37b41f5b8";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -718,7 +726,7 @@
 				INFOPLIST_FILE = "FitnessTracker/FitnessTracker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = FitnessTracker;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "59c4ad7f-f0ad-4f8a-9ae1-75d37b41f5b8";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

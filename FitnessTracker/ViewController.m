@@ -66,6 +66,35 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
+    NSShadow *shadow = [[NSShadow alloc] init];
+    shadow.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8];
+    shadow.shadowOffset = CGSizeMake(0, 1);
+
+    [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
+                                                           [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0], NSForegroundColorAttributeName,
+                                                           shadow, NSShadowAttributeName,
+                                                           [UIFont fontWithName:@"Arial" size:17.0], NSFontAttributeName, nil]];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    CGRect navBounds = CGRectMake(0, 0, 320, 94);
+    self.navigationController.navigationBar.bounds = navBounds;
+    
+    CALayer * bgGradientLayer = [self gradientBGLayerForBounds:self.navigationController.navigationBar.bounds];
+    UIGraphicsBeginImageContext(bgGradientLayer.bounds.size);
+    [bgGradientLayer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage * bgAsImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    
+    if (bgAsImage != nil)
+    {
+        [[UINavigationBar appearance] setBackgroundImage:bgAsImage
+                                           forBarMetrics:UIBarMetricsDefault];
+    }
+    else
+    {
+        NSLog(@"Failed to create gradient bg image, user will see standard tint color gradient.");
+    }
+    
     /* Set the tableView's datasource and delegate properties to self so that the UITableViewControllerDelegate and UITableViewControllerDataSource know to pass message to this instance of the viewController. */
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -94,15 +123,6 @@
     self.isOverDue = NO;
     /* Determine if the goal is overdue using the helper method isDateGreaterThanDate */
     self.isOverDue = [self isDateGreaterThanDate:[NSDate date] and:goal.date];
-    /*if(_goalObjects && !self.isOverDue)
-    {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"OVERDUE GOALS!" message:@"You currently have overdue tasks" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
-    }*/
-    [self.navBar setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-      [UIFont fontWithName:@"Zapfino" size:17],
-      NSFontAttributeName, nil]];
     
     FBRequest *request = [FBRequest requestForMe];
     
@@ -155,12 +175,17 @@
             }];
         }
     }];
-    [self.navBar setBackgroundImage:[UIImage imageNamed:@"ChampionNavBar.png"] forBarMetrics:UIBarMetricsDefault];
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [self checkIndexPath];
 }
 
@@ -484,7 +509,7 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
 
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
     [self.tableView reloadData];
 }
 
@@ -499,19 +524,13 @@
     NSInteger days = [comps day];
     
     
-    if(days < 2 && !goalObject.isAchieved)
-    {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"YOUR GOAL DEADLINE IS RAPIDLY APPROACHING!" message:@"This goal is not far away, please do not forget." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
-    }
+//    if(days < 2 && !goalObject.isAchieved)
+//    {
+//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"YOUR GOAL DEADLINE IS RAPIDLY APPROACHING!" message:@"This goal is not far away, please do not forget." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//        [alert show];
+//    }
     
     return days;
-}
-
-/* Dismiss the AddTaskViewController as the presented view.*/
--(void)didCancel
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - CCDetailTaskViewControllerDelegate
@@ -528,7 +547,7 @@
 /* Convert and return an NSDictionary of the taskObject */
 -(NSDictionary *)goalObjectsAsAPropertyList:(FitnessGoal *)goalObject
 {
-    NSDictionary *dictionary = @{GOAL_NAME : goalObject.name, GOAL_DESCRIPTION : goalObject.description, GOAL_DATE : goalObject.date, GOAL_ACHIEVED : @(goalObject.isAchieved) };
+    NSDictionary *dictionary = @{GOAL_NAME : goalObject.name, GOAL_DESCRIPTION : goalObject.desc, GOAL_DATE : goalObject.date, GOAL_ACHIEVED : @(goalObject.isAchieved) };
     return dictionary;
 }
 
@@ -591,10 +610,6 @@
         }
     }
     
-        /*for (int x = 0; x < [self.goalObjectsWeekFour count]; x ++){
-            [goalObjectsAsPropertyLists addObject:[self goalObjectsAsAPropertyList:self.goalObjectsWeekFour[x]]];
-        }*/
-    
     /* Save the updated array to NSUserDefaults. */
     [[NSUserDefaults standardUserDefaults] setObject:goalObjectsAsPropertyLists forKey:GOAL_OBJECTS_KEY];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -649,10 +664,12 @@
     // Text Color
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     [header.textLabel setTextColor:[UIColor whiteColor]];
+    header.textLabel.shadowColor = [UIColor blackColor];
+    header.textLabel.font = [UIFont fontWithName:@"Helvetica" size:17.0];
     
     // Another way to set the background color
     // Note: does not preserve gradient effect of original header
-     header.contentView.backgroundColor = [UIColor blackColor];
+    header.contentView.backgroundColor = [UIColor colorWithRed:42.0f / 255.0f green:184.0f / 255.0f blue:252.0f / 255.0f alpha:1.0f];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -665,8 +682,8 @@
     
     /* Determine which task object should be displayed for the specific indexPath.row. */
     if(indexPath.section == 0){
-    goal = self.goalObjects[indexPath.row];
-    cell.textLabel.text = goal.name;
+        goal = self.goalObjects[indexPath.row];
+        cell.textLabel.text = goal.name;
     }
     
     else if(indexPath.section == 1){
@@ -710,11 +727,21 @@
     {
         cell.backgroundColor = [UIColor greenColor];
     }
-    else if (days < 2 && self.isOverDue == YES) cell.backgroundColor = [UIColor redColor];
     
-    else if(days < 2) cell.backgroundColor = [UIColor yellowColor];
+    else if (days < 2 && self.isOverDue == YES)
+    {
+        cell.backgroundColor = [UIColor whiteColor];
+        cell.textLabel.textColor = [UIColor redColor];
+        cell.detailTextLabel.textColor = [UIColor redColor];
+    }
     
-    else cell.backgroundColor = [UIColor blueColor];
+    else if(days < 2)
+    {
+        cell.backgroundColor = [UIColor whiteColor];
+        cell.textLabel.textColor = [UIColor yellowColor];
+        cell.detailTextLabel.textColor = [UIColor yellowColor];
+    }
+    
     
     [cell.textLabel setNumberOfLines:0];
     [cell.textLabel sizeToFit];
@@ -727,30 +754,6 @@
 
     return cell;
 }
-
-/*- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    int height = [self findHeightForText:self.goalCell.textLabel.text havingWidth:320 andFont:[UIFont systemFontOfSize:17.0f]];
-    
-    height += [self findHeightForText:self.goalCell.detailTextLabel.text havingWidth:320 andFont:[UIFont systemFontOfSize:14.0f]];
-    
-    return height + 50; //important to know the size of your custom cell without the height of the variable labels
-}
-
-- (CGFloat)findHeightForText:(NSString *)text havingWidth:(CGFloat)widthValue andFont:(UIFont *)font {
-    CGFloat result = font.pointSize+4;
-    if (text) {
-        CGSize size;
-        
-        CGRect frame = [text boundingRectWithSize:CGSizeMake(widthValue, CGFLOAT_MAX)
-                                          options:NSStringDrawingUsesLineFragmentOrigin
-                                       attributes:@{NSFontAttributeName:font}
-                                          context:nil];
-        size = CGSizeMake(frame.size.width, frame.size.height+1);
-        result = MAX(size.height, result); //At least one row
-    }
-    return result;
-}*/
-
 
 #pragma mark - UITableViewDelegate
 
@@ -844,6 +847,17 @@
         [self.goalObjectsWeekThree insertObject:goalObject atIndex:destinationIndexPath.row];
     }
     [self saveGoals];
+}
+
+- (CALayer *)gradientBGLayerForBounds:(CGRect)bounds
+{
+    CAGradientLayer * gradientBG = [CAGradientLayer layer];
+    gradientBG.frame = bounds;
+    gradientBG.colors = [NSArray arrayWithObjects:
+                         (id)[[UIColor colorWithRed:42.0f / 255.0f green:184.0f / 255.0f blue:252.0f / 255.0f alpha:1.0f] CGColor],
+                         (id)[[UIColor colorWithRed:31.0f / 255.0f green:130.0f / 255.0f blue:190.0f / 255.0f alpha:1.0f] CGColor],
+                         nil];
+    return gradientBG;
 }
 
 @end

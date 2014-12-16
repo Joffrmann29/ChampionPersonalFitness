@@ -30,15 +30,19 @@
     
     /* Set the initial view objects with the Task's properties */
     self.textField.text = self.goal.name;
-    self.textView.text = self.goal.description;
+    self.textView.text = self.goal.desc;
     self.datePicker.date = self.goal.date;
     
-    [self.navBar setBackgroundImage:[UIImage imageNamed:@"ChampionNavBar.png"] forBarMetrics:UIBarMetricsDefault];
+    self.view.backgroundColor = [UIColor colorWithRed:42.0f / 255.0f green:184.0f / 255.0f blue:252.0f / 255.0f alpha:1.0f];
     
-    [self.navBar setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-      [UIFont fontWithName:@"Zapfino" size:17],
-      NSFontAttributeName, nil]];
+    [self.datePicker setValue:[UIColor whiteColor] forKeyPath:@"textColor"];
+    
+    SEL selector = NSSelectorFromString(@"setHighlightsToday:");
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDatePicker instanceMethodSignatureForSelector:selector]];
+    BOOL no = NO;
+    [invocation setSelector:selector];
+    [invocation setArgument:&no atIndex:2];
+    [invocation invokeWithTarget:self.datePicker];
     
     /* Set the delegate properties for the UITextView and UITextField so that the CCEditTaskViewController instance can recieve messages from the UITextFieldDelegate and UITextViewDelegate. */
     self.textView.delegate = self;
@@ -101,5 +105,16 @@
 - (IBAction)back:(UIBarButtonItem *)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (CALayer *)gradientBGLayerForBounds:(CGRect)bounds
+{
+    CAGradientLayer * gradientBG = [CAGradientLayer layer];
+    gradientBG.frame = bounds;
+    gradientBG.colors = [NSArray arrayWithObjects:
+                         (id)[[UIColor colorWithRed:42.0f / 255.0f green:184.0f / 255.0f blue:252.0f / 255.0f alpha:1.0f] CGColor],
+                         (id)[[UIColor colorWithRed:11.0f / 255.0f green:102.0f / 255.0f blue:101.0f / 255.0f alpha:1.0f] CGColor],
+                         nil];
+    return gradientBG;
 }
 @end

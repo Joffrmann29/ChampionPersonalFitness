@@ -32,12 +32,17 @@
     self.textView.delegate = self;
     self.textField.delegate = self;
     NSLog(@"%@", self.datePicker.date);
-    [self.navBar setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-      [UIFont fontWithName:@"Zapfino" size:17],
-      NSFontAttributeName, nil]];
     
-    [self.navBar setBackgroundImage:[UIImage imageNamed:@"ChampionNavBar.png"] forBarMetrics:UIBarMetricsDefault];
+    self.view.backgroundColor = [UIColor colorWithRed:42.0f / 255.0f green:184.0f / 255.0f blue:252.0f / 255.0f alpha:1.0f];
+    
+    [self.datePicker setValue:[UIColor whiteColor] forKeyPath:@"textColor"];
+    
+    SEL selector = NSSelectorFromString(@"setHighlightsToday:");
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDatePicker instanceMethodSignatureForSelector:selector]];
+    BOOL no = NO;
+    [invocation setSelector:selector];
+    [invocation setArgument:&no atIndex:2];
+    [invocation invokeWithTarget:self.datePicker];
 }
 
 - (void)didReceiveMemoryWarning
@@ -100,10 +105,5 @@
     else{
         [self.delegate didAddGoal:[self returnNewGoalObject]];
     }
-}
-
-- (IBAction)back:(UIBarButtonItem *)sender
-{
-    [self.delegate didCancel];
 }
 @end

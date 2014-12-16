@@ -11,6 +11,7 @@
 @interface ProfileViewController ()
 
 @property (strong, nonatomic) NSMutableData *imageData;
+@property (strong, nonatomic) IBOutlet UIView *navView;
 
 @end
 
@@ -49,18 +50,6 @@
     self.bmiLabel.text = foundUser[@"BMI"];
     [foundUser saveEventually];
     
-    /*CAGradientLayer *viewGradient = [CAGradientLayer layer];
-    viewGradient.frame = self.view.bounds;
-    viewGradient.colors = [NSArray arrayWithObjects:
-                           (id)[[UIColor colorWithRed:12.0f / 255.0f green:62.0f / 255.0f blue:222.0f / 255.0f alpha:1.0f] CGColor],
-                           (id)[[UIColor colorWithRed:11.0f / 255.0f green:51.0f / 255.0f blue:101.0f / 255.0f alpha:1.0f] CGColor],
-                           nil];
-    [self.view.layer insertSublayer:viewGradient atIndex:0];*/
-    [self.navBar setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-      [UIFont fontWithName:@"Zapfino" size:17],
-      NSFontAttributeName, nil]];
-    
     //NSDictionary *profileDict = self.matchedUser[@"profile"];
     self.matchedUser = [PFUser currentUser];
     PFFile *theImage = [self.matchedUser objectForKey:USERPROFILEIMAGE];
@@ -69,7 +58,6 @@
         self.imageView.image = image;
     }];
     self.view.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"Running.jpg"]];
-    [self.navBar setBackgroundImage:[UIImage imageNamed:@"ChampionNavBar.png"] forBarMetrics:UIBarMetricsDefault];
 }
 
 - (void)requestImage
